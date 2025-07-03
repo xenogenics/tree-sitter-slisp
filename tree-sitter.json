@@ -1,0 +1,38 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "slisp",
+      "camelcase": "SLisp",
+      "title": "SlightLisp",
+      "scope": "source.slisp",
+      "file-types": [
+        "sl"
+      ],
+      "injection-regex": "^slisp$",
+      "class-name": "TreeSitterSlisp"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "ISC",
+    "description": "SlightLisp Language Grammar",
+    "authors": [
+      {
+        "name": "Xavier R. Guerin"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter/tree-sitter-slisp"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
