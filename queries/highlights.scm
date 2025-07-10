@@ -3,7 +3,6 @@
   "cond"
   "if"
   "let"
-  "load"
   "match"
   "prog"
   "quote"
@@ -12,30 +11,30 @@
 ] @keyword
 
 ;; Apply
-(list . (symbol) @function)
+(apply . (symbol) @function)
+
+
+;; Load module
+[ "load" ] @keyword
+
+(load_module . (symbol) @namespace)
 
 ;; Function definitions
-[
- "def"
- ] @keyword
+[ "def" ] @keyword
 
 (function_definition name: (symbol) @function)
-(function_definition parameters: (list (symbol) @variable.parameter))
+(function_definition parameters: (parameters (symbol) @variable.parameter))
 (function_definition docstring: (string) @comment)
 
-
 ;; Lambda 
-[
- "\\"
- ] @keyword
+[ "\\" ] @keyword
 
-(lambda parameters: (list (symbol) @variable.parameter))
+(lambda parameters: (parameters (symbol) @variable.parameter))
 
 ;; Atoms
-(char) @number
+(char) @constant.character
 (comment) @comment
 (number) @number
-(quote) @operator
 (string) @string
 
 ;; Punctuation
@@ -45,12 +44,12 @@
 ] @punctuation.bracket
 
 ;; Operators
-[
-  "~"
-  "'"
-  "`"
-  ","
-] @operator
+(dot_item) @operator
+(dot_statement) @operator
+(tilde) @operator
+(backquote) @operator
+(quote) @operator
+(unquote) @operator
 
 ;; Highlight nil and t as constants, unlike other symbols
 [

@@ -10,37 +10,14 @@ module.exports = grammar({
   extras: ($) => [/(\s|\f)/, $.comment],
 
   rules: {
-    source_file: ($) => repeat($._sexp),
+    source_file: ($) => repeat(choice($.top_level_statement, $.comment)),
 
-    _sexp: ($) =>
+    comment: ($) => COMMENT,
+
+    top_level_statement: ($) =>
       choice(
-        $.special_form,
         $.function_definition,
-        $.lambda,
-        $.list,
-        $._atom,
-        $.tilde,
-        $.backquote,
-        $.quote,
-        $.unquote,
-      ),
-
-    special_form: ($) =>
-      seq(
-        "(",
-        choice(
-          "cond",
-          "if",
-          "let",
-          "load",
-          "match",
-          "prog",
-          "quote",
-          "syscall",
-          "unless",
-        ),
-        repeat($._sexp),
-        ")"
+        $.load_module,
       ),
 
     function_definition: ($) =>
@@ -50,20 +27,96 @@ module.exports = grammar({
           "(",
           "def",
           field("name", $.symbol),
-          field("parameters", $._sexp),
+          field("parameters", $.parameters),
           optional(field("docstring", $.string)),
-          repeat($._sexp),
+          repeat($.statement),
           ")"
         )
+      ),
+
+    parameters: ($) =>
+      choice(
+        $.symbol,
+        seq("(", repeat($.symbol), optional(seq(".", $.symbol)), ")"),
+      ),
+
+    load_module: ($) =>
+      prec(
+        1,
+        seq(
+          "(",
+          "load",
+          repeat(
+            choice(
+              seq("'", $.symbol),
+              seq("'", "(", repeat($.symbol), ")"),
+            )
+          ),
+          ")"
+        )
+      ),
+
+    statement: ($) =>
+      choice(
+        $.apply,
+        $.special_form,
+        $.lambda,
+        $.tilde,
+        $.backquote,
+        $.quote,
+        $.terminal,
+      ),
+      
+    dot_statement: ($) => seq(".", $.statement),
+
+    apply: ($) =>
+      seq(
+        "(",
+        $.symbol,
+        repeat($.statement),
+        optional($.dot_statement),
+        ")",
+      ),
+
+    special_form: ($) =>
+      seq(
+        "(",
+        choice(
+          "cond",
+          "if",
+          "let",
+          "match",
+          "prog",
+          "quote",
+          "syscall",
+          "unless",
+        ),
+        repeat($.statement),
+        ")"
       ),
 
     lambda: ($) =>
       prec(
         1,
-        seq("(", "\\", field("parameters", $._sexp), repeat($._sexp), ")")
+        seq("(", "\\", field("parameters", $.parameters), repeat($.statement), ")")
       ),
 
-    _atom: ($) =>
+    tilde: ($) => seq("~", $.statement),
+    backquote: ($) => seq("`", choice($.list_or_terminal, $.unquote)),
+    quote: ($) => seq("'", $.list_or_terminal),
+    unquote: ($) => seq(",", $.statement),
+
+    list: ($) => seq("(", repeat($.item), optional($.dot_item), ")"),
+    dot_item: ($) => seq(".", $.item),
+    item: ($) => choice($.tilde, $.list_or_terminal),
+
+    list_or_terminal: ($) =>
+      choice(
+        $.list,
+        $.terminal,
+      ),
+
+    terminal: ($) =>
       choice(
         $.number,
         $.char,
@@ -75,13 +128,5 @@ module.exports = grammar({
     char: ($) => CHAR,
     string: ($) => STRING,
     symbol: ($) => choice("nil", "t", SYMBOL),
-    tilde: ($) => seq("~", $._sexp),
-    backquote: ($) => seq("`", $._sexp),
-    quote: ($) => seq("'", $._sexp),
-    unquote: ($) => seq(",", $._sexp),
-    dot: ($) => token("."),
-    list: ($) => seq("(", choice(repeat($._sexp)), ")"),
-
-    comment: ($) => COMMENT,
   },
 });
