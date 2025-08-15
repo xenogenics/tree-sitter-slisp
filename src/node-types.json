@@ -201,15 +201,46 @@
     }
   },
   {
-    "type": "load_module",
+    "type": "macro_definition",
     "named": true,
-    "fields": {},
+    "fields": {
+      "docstring": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "parameters",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "symbol",
+          "type": "statement",
           "named": true
         }
       ]
@@ -379,7 +410,11 @@
           "named": true
         },
         {
-          "type": "load_module",
+          "type": "macro_definition",
+          "named": true
+        },
+        {
+          "type": "use_module",
           "named": true
         }
       ]
@@ -395,6 +430,21 @@
       "types": [
         {
           "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "use_module",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "symbol",
           "named": true
         }
       ]
@@ -421,6 +471,10 @@
     "named": false
   },
   {
+    "type": "T",
+    "named": false
+  },
+  {
     "type": "\\",
     "named": false
   },
@@ -438,10 +492,6 @@
     "extra": true
   },
   {
-    "type": "cond",
-    "named": false
-  },
-  {
     "type": "def",
     "named": false
   },
@@ -450,15 +500,15 @@
     "named": false
   },
   {
+    "type": "it",
+    "named": false
+  },
+  {
     "type": "let",
     "named": false
   },
   {
-    "type": "load",
-    "named": false
-  },
-  {
-    "type": "match",
+    "type": "mac",
     "named": false
   },
   {
@@ -486,11 +536,7 @@
     "named": false
   },
   {
-    "type": "t",
-    "named": false
-  },
-  {
-    "type": "unless",
+    "type": "use",
     "named": false
   },
   {

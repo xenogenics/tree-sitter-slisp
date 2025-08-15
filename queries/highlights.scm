@@ -1,23 +1,18 @@
 ;; Special forms
 [
-  "cond"
   "if"
   "let"
-  "match"
   "prog"
-  "quote"
   "syscall"
-  "unless"
 ] @keyword
 
 ;; Apply
 (apply . (symbol) @function)
 
+;; Use module
+[ "use" ] @keyword
 
-;; Load module
-[ "load" ] @keyword
-
-(load_module . (symbol) @namespace)
+(use_module . (symbol) @namespace)
 
 ;; Function definitions
 [ "def" ] @keyword
@@ -25,6 +20,13 @@
 (function_definition name: (symbol) @function)
 (function_definition parameters: (parameters (symbol) @variable.parameter))
 (function_definition docstring: (string) @comment)
+
+;; Macro definitions
+[ "mac" ] @keyword
+
+(macro_definition name: (symbol) @function)
+(macro_definition parameters: (parameters (symbol) @variable.parameter))
+(macro_definition docstring: (string) @comment)
 
 ;; Lambda 
 [ "\\" ] @keyword
@@ -54,6 +56,9 @@
 ;; Highlight nil and t as constants, unlike other symbols
 [
   "nil"
-  "t"
-] @constant.builtin
+] @constant.builtin.boolean
 
+;; Highlight variable names used in anamorphic macros.
+[
+  "it"
+] @variable.builtin

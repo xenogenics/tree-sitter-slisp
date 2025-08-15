@@ -17,7 +17,8 @@ module.exports = grammar({
     top_level_statement: ($) =>
       choice(
         $.function_definition,
-        $.load_module,
+        $.macro_definition,
+        $.use_module,
       ),
 
     function_definition: ($) =>
@@ -33,6 +34,20 @@ module.exports = grammar({
           ")"
         )
       ),
+      
+    macro_definition: ($) =>
+      prec(
+        1,
+        seq(
+          "(",
+          "mac",
+          field("name", $.symbol),
+          field("parameters", $.parameters),
+          optional(field("docstring", $.string)),
+          repeat($.statement),
+          ")"
+        )
+      ),
 
     parameters: ($) =>
       choice(
@@ -40,12 +55,12 @@ module.exports = grammar({
         seq("(", repeat($.symbol), optional(seq(".", $.symbol)), ")"),
       ),
 
-    load_module: ($) =>
+    use_module: ($) =>
       prec(
         1,
         seq(
           "(",
-          "load",
+          "use",
           repeat(
             choice(
               seq("'", $.symbol),
@@ -82,14 +97,11 @@ module.exports = grammar({
       seq(
         "(",
         choice(
-          "cond",
           "if",
           "let",
-          "match",
           "prog",
           "quote",
           "syscall",
-          "unless",
         ),
         repeat($.statement),
         ")"
@@ -127,6 +139,6 @@ module.exports = grammar({
     number: ($) => NUMBER,
     char: ($) => CHAR,
     string: ($) => STRING,
-    symbol: ($) => choice("nil", "t", SYMBOL),
+    symbol: ($) => choice("nil", "T", "it", SYMBOL),
   },
 });

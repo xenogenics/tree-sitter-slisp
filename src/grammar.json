@@ -34,7 +34,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "load_module"
+          "name": "macro_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "use_module"
         }
       ]
     },
@@ -51,6 +55,66 @@
           {
             "type": "STRING",
             "value": "def"
+          },
+          {
+            "type": "FIELD",
+            "name": "name",
+            "content": {
+              "type": "SYMBOL",
+              "name": "symbol"
+            }
+          },
+          {
+            "type": "FIELD",
+            "name": "parameters",
+            "content": {
+              "type": "SYMBOL",
+              "name": "parameters"
+            }
+          },
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "docstring",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "string"
+                }
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          },
+          {
+            "type": "REPEAT",
+            "content": {
+              "type": "SYMBOL",
+              "name": "statement"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": ")"
+          }
+        ]
+      }
+    },
+    "macro_definition": {
+      "type": "PREC",
+      "value": 1,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "("
+          },
+          {
+            "type": "STRING",
+            "value": "mac"
           },
           {
             "type": "FIELD",
@@ -148,7 +212,7 @@
         }
       ]
     },
-    "load_module": {
+    "use_module": {
       "type": "PREC",
       "value": 1,
       "content": {
@@ -160,7 +224,7 @@
           },
           {
             "type": "STRING",
-            "value": "load"
+            "value": "use"
           },
           {
             "type": "REPEAT",
@@ -308,19 +372,11 @@
           "members": [
             {
               "type": "STRING",
-              "value": "cond"
-            },
-            {
-              "type": "STRING",
               "value": "if"
             },
             {
               "type": "STRING",
               "value": "let"
-            },
-            {
-              "type": "STRING",
-              "value": "match"
             },
             {
               "type": "STRING",
@@ -333,10 +389,6 @@
             {
               "type": "STRING",
               "value": "syscall"
-            },
-            {
-              "type": "STRING",
-              "value": "unless"
             }
           ]
         },
@@ -572,7 +624,11 @@
         },
         {
           "type": "STRING",
-          "value": "t"
+          "value": "T"
+        },
+        {
+          "type": "STRING",
+          "value": "it"
         },
         {
           "type": "TOKEN",
