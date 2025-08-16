@@ -36,7 +36,7 @@
 ;; Atoms
 (char) @constant.character
 (comment) @comment
-(number) @number
+(number) @constant.numeric
 (string) @string
 
 ;; Punctuation
