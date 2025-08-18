@@ -124,7 +124,7 @@ module.exports = grammar({
         repeat(
           seq(
             "(",
-            $.symbol,
+            field("name", $.symbol),
             optional($.dot),
             $.tilde_or_backquote_or_simple_stmt,
             ")",

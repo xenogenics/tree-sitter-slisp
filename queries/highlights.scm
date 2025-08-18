@@ -1,10 +1,17 @@
 ;; Keywords
 [
   "if"
-  "let"
   "prog"
   "syscall"
 ] @keyword
+
+;; Let binding
+[
+  "let"
+] @keyword
+
+(let_bindings name: (symbol) @variable)
+
 
 ;; Apply
 (apply_stmt . (symbol) @function)

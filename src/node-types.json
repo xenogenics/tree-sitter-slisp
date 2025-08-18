@@ -223,17 +223,24 @@
   {
     "type": "let_bindings",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
           "type": "dot",
-          "named": true
-        },
-        {
-          "type": "symbol",
           "named": true
         },
         {
