@@ -378,17 +378,9 @@
         }
       ]
     },
-    "let_stmt": {
+    "let_bindings": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "STRING",
-          "value": "("
-        },
-        {
-          "type": "STRING",
-          "value": "let"
-        },
         {
           "type": "STRING",
           "value": "("
@@ -432,6 +424,32 @@
         {
           "type": "STRING",
           "value": ")"
+        }
+      ]
+    },
+    "let_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "STRING",
+          "value": "let"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "tilde_stmt"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "let_bindings"
+            }
+          ]
         },
         {
           "type": "REPEAT",
@@ -528,11 +546,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "list_or_terminal"
+          "name": "quote_list_or_terminal"
         }
       ]
     },
-    "list": {
+    "quote_list": {
       "type": "SEQ",
       "members": [
         {
@@ -543,7 +561,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "item"
+            "name": "quote_item"
           }
         },
         {
@@ -551,7 +569,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "dot_item"
+              "name": "quote_dot_item"
             },
             {
               "type": "BLANK"
@@ -564,7 +582,7 @@
         }
       ]
     },
-    "dot_item": {
+    "quote_dot_item": {
       "type": "SEQ",
       "members": [
         {
@@ -573,11 +591,11 @@
         },
         {
           "type": "SYMBOL",
-          "name": "item"
+          "name": "quote_item"
         }
       ]
     },
-    "item": {
+    "quote_item": {
       "type": "CHOICE",
       "members": [
         {
@@ -586,16 +604,16 @@
         },
         {
           "type": "SYMBOL",
-          "name": "list_or_terminal"
+          "name": "quote_list_or_terminal"
         }
       ]
     },
-    "list_or_terminal": {
+    "quote_list_or_terminal": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "list"
+          "name": "quote_list"
         },
         {
           "type": "SYMBOL",
@@ -625,7 +643,86 @@
         },
         {
           "type": "SYMBOL",
-          "name": "unquote_list_or_terminal"
+          "name": "backquote_list_or_terminal"
+        }
+      ]
+    },
+    "backquote_list_or_terminal": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "backquote_list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "terminal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_splice_stmt"
+        }
+      ]
+    },
+    "backquote_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "backquote_item"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "backquote_dot_item"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "backquote_dot_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "dot"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "backquote_item"
+        }
+      ]
+    },
+    "backquote_item": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "tilde_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "backquote_list_or_terminal"
         }
       ]
     },
@@ -652,85 +749,6 @@
         {
           "type": "SYMBOL",
           "name": "simple_stmt"
-        }
-      ]
-    },
-    "unquote_list": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "("
-        },
-        {
-          "type": "REPEAT",
-          "content": {
-            "type": "SYMBOL",
-            "name": "unquote_item"
-          }
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "unquote_dot_item"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
-        },
-        {
-          "type": "STRING",
-          "value": ")"
-        }
-      ]
-    },
-    "unquote_dot_item": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "dot"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "unquote_item"
-        }
-      ]
-    },
-    "unquote_item": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "tilde_stmt"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "unquote_list_or_terminal"
-        }
-      ]
-    },
-    "unquote_list_or_terminal": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "unquote_list"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "terminal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "unquote_stmt"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "unquote_splice_stmt"
         }
       ]
     },

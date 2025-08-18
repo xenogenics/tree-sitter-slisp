@@ -27,6 +27,90 @@
     }
   },
   {
+    "type": "backquote_dot_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "backquote_item",
+          "named": true
+        },
+        {
+          "type": "dot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "backquote_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "backquote_list_or_terminal",
+          "named": true
+        },
+        {
+          "type": "tilde_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "backquote_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "backquote_dot_item",
+          "named": true
+        },
+        {
+          "type": "backquote_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "backquote_list_or_terminal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "backquote_list",
+          "named": true
+        },
+        {
+          "type": "terminal",
+          "named": true
+        },
+        {
+          "type": "unquote_splice_stmt",
+          "named": true
+        },
+        {
+          "type": "unquote_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "backquote_or_simple_stmt",
     "named": true,
     "fields": {},
@@ -58,26 +142,7 @@
           "named": true
         },
         {
-          "type": "unquote_list_or_terminal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "dot_item",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "dot",
-          "named": true
-        },
-        {
-          "type": "item",
+          "type": "backquote_list_or_terminal",
           "named": true
         }
       ]
@@ -130,25 +195,6 @@
     }
   },
   {
-    "type": "item",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "list_or_terminal",
-          "named": true
-        },
-        {
-          "type": "tilde_stmt",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "lambda_stmt",
     "named": true,
     "fields": {
@@ -175,7 +221,7 @@
     }
   },
   {
-    "type": "let_stmt",
+    "type": "let_bindings",
     "named": true,
     "fields": {},
     "children": {
@@ -198,38 +244,23 @@
     }
   },
   {
-    "type": "list",
+    "type": "let_stmt",
     "named": true,
     "fields": {},
     "children": {
       "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "dot_item",
-          "named": true
-        },
-        {
-          "type": "item",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "list_or_terminal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "list",
+          "type": "let_bindings",
           "named": true
         },
         {
-          "type": "terminal",
+          "type": "tilde_or_backquote_or_simple_stmt",
+          "named": true
+        },
+        {
+          "type": "tilde_stmt",
           "named": true
         }
       ]
@@ -301,6 +332,82 @@
     }
   },
   {
+    "type": "quote_dot_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dot",
+          "named": true
+        },
+        {
+          "type": "quote_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "quote_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "quote_list_or_terminal",
+          "named": true
+        },
+        {
+          "type": "tilde_stmt",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "quote_list",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "quote_dot_item",
+          "named": true
+        },
+        {
+          "type": "quote_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "quote_list_or_terminal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "quote_list",
+          "named": true
+        },
+        {
+          "type": "terminal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "quote_stmt",
     "named": true,
     "fields": {},
@@ -309,11 +416,11 @@
       "required": true,
       "types": [
         {
-          "type": "list_or_terminal",
+          "type": "quote",
           "named": true
         },
         {
-          "type": "quote",
+          "type": "quote_list_or_terminal",
           "named": true
         }
       ]
@@ -477,90 +584,6 @@
         },
         {
           "type": "use_module",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unquote_dot_item",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "dot",
-          "named": true
-        },
-        {
-          "type": "unquote_item",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unquote_item",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "tilde_stmt",
-          "named": true
-        },
-        {
-          "type": "unquote_list_or_terminal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unquote_list",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "unquote_dot_item",
-          "named": true
-        },
-        {
-          "type": "unquote_item",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "unquote_list_or_terminal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "terminal",
-          "named": true
-        },
-        {
-          "type": "unquote_list",
-          "named": true
-        },
-        {
-          "type": "unquote_splice_stmt",
-          "named": true
-        },
-        {
-          "type": "unquote_stmt",
           "named": true
         }
       ]

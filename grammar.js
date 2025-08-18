@@ -118,10 +118,8 @@ module.exports = grammar({
 
     // Special form "let" statement.
 
-    let_stmt: ($) =>
+    let_bindings: ($) =>
       seq(
-        "(",
-        "let",
         "(",
         repeat(
           seq(
@@ -133,6 +131,13 @@ module.exports = grammar({
           ),
         ),
         ")",
+      ),
+    
+    let_stmt: ($) =>
+      seq(
+        "(",
+        "let",
+        choice($.tilde_stmt, $.let_bindings),
         repeat($.tilde_or_backquote_or_simple_stmt),
         ")"
       ),
@@ -163,15 +168,15 @@ module.exports = grammar({
 
     // '() statement.
 
-    quote_stmt: ($) => seq($.quote, $.list_or_terminal),
+    quote_stmt: ($) => seq($.quote, $.quote_list_or_terminal),
     
-    list: ($) => seq("(", repeat($.item), optional($.dot_item), ")"),
-    dot_item: ($) => seq($.dot, $.item),
-    item: ($) => choice($.tilde_stmt, $.list_or_terminal),
+    quote_list: ($) => seq("(", repeat($.quote_item), optional($.quote_dot_item), ")"),
+    quote_dot_item: ($) => seq($.dot, $.quote_item),
+    quote_item: ($) => choice($.tilde_stmt, $.quote_list_or_terminal),
 
-    list_or_terminal: ($) =>
+    quote_list_or_terminal: ($) =>
       choice(
-        $.list,
+        $.quote_list,
         $.terminal,
       ),
 
@@ -181,21 +186,22 @@ module.exports = grammar({
 
     // `() statement.
 
-    backquote_stmt: ($) => seq($.backquote, $.unquote_list_or_terminal),
-    unquote_stmt: ($) => seq($.unquote, $.simple_stmt),
-    unquote_splice_stmt: ($) => seq($.unquote_splice, $.simple_stmt),
-
-    unquote_list: ($) => seq("(", repeat($.unquote_item), optional($.unquote_dot_item), ")"),
-    unquote_dot_item: ($) => seq($.dot, $.unquote_item),
-    unquote_item: ($) => choice($.tilde_stmt, $.unquote_list_or_terminal),
-
-    unquote_list_or_terminal: ($) =>
+    backquote_stmt: ($) => seq($.backquote, $.backquote_list_or_terminal),
+    
+    backquote_list_or_terminal: ($) =>
       choice(
-        $.unquote_list,
+        $.backquote_list,
         $.terminal,
         $.unquote_stmt,
         $.unquote_splice_stmt,
       ),
+
+    backquote_list: ($) => seq("(", repeat($.backquote_item), optional($.backquote_dot_item), ")"),
+    backquote_dot_item: ($) => seq($.dot, $.backquote_item),
+    backquote_item: ($) => choice($.tilde_stmt, $.backquote_list_or_terminal),
+
+    unquote_stmt: ($) => seq($.unquote, $.simple_stmt),
+    unquote_splice_stmt: ($) => seq($.unquote_splice, $.simple_stmt),
 
     // Operators.
       
