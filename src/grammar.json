@@ -9,7 +9,7 @@
         "members": [
           {
             "type": "SYMBOL",
-            "name": "top_level_statement"
+            "name": "top_level_stmt"
           },
           {
             "type": "SYMBOL",
@@ -25,7 +25,7 @@
         "value": ";.*"
       }
     },
-    "top_level_statement": {
+    "top_level_stmt": {
       "type": "CHOICE",
       "members": [
         {
@@ -92,7 +92,7 @@
             "type": "REPEAT",
             "content": {
               "type": "SYMBOL",
-              "name": "statement"
+              "name": "tilde_or_backquote_or_simple_stmt"
             }
           },
           {
@@ -152,7 +152,7 @@
             "type": "REPEAT",
             "content": {
               "type": "SYMBOL",
-              "name": "statement"
+              "name": "tilde_or_backquote_or_simple_stmt"
             }
           },
           {
@@ -190,8 +190,8 @@
                   "type": "SEQ",
                   "members": [
                     {
-                      "type": "STRING",
-                      "value": "."
+                      "type": "SYMBOL",
+                      "name": "dot"
                     },
                     {
                       "type": "SYMBOL",
@@ -235,8 +235,8 @@
                   "type": "SEQ",
                   "members": [
                     {
-                      "type": "STRING",
-                      "value": "'"
+                      "type": "SYMBOL",
+                      "name": "quote"
                     },
                     {
                       "type": "SYMBOL",
@@ -248,8 +248,8 @@
                   "type": "SEQ",
                   "members": [
                     {
-                      "type": "STRING",
-                      "value": "'"
+                      "type": "SYMBOL",
+                      "name": "quote"
                     },
                     {
                       "type": "STRING",
@@ -278,32 +278,54 @@
         ]
       }
     },
-    "statement": {
+    "tilde_or_backquote_or_simple_stmt": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "apply"
+          "name": "tilde_stmt"
         },
         {
           "type": "SYMBOL",
-          "name": "special_form"
+          "name": "backquote_or_simple_stmt"
+        }
+      ]
+    },
+    "backquote_or_simple_stmt": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "backquote_stmt"
         },
         {
           "type": "SYMBOL",
-          "name": "lambda"
+          "name": "simple_stmt"
+        }
+      ]
+    },
+    "simple_stmt": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "apply_stmt"
         },
         {
           "type": "SYMBOL",
-          "name": "tilde"
+          "name": "let_stmt"
         },
         {
           "type": "SYMBOL",
-          "name": "backquote"
+          "name": "special_stmt"
         },
         {
           "type": "SYMBOL",
-          "name": "quote"
+          "name": "lambda_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "quote_stmt"
         },
         {
           "type": "SYMBOL",
@@ -311,20 +333,7 @@
         }
       ]
     },
-    "dot_statement": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "."
-        },
-        {
-          "type": "SYMBOL",
-          "name": "statement"
-        }
-      ]
-    },
-    "apply": {
+    "apply_stmt": {
       "type": "SEQ",
       "members": [
         {
@@ -339,15 +348,24 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "statement"
+            "name": "tilde_or_backquote_or_simple_stmt"
           }
         },
         {
           "type": "CHOICE",
           "members": [
             {
-              "type": "SYMBOL",
-              "name": "dot_statement"
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "dot"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "backquote_stmt"
+                }
+              ]
             },
             {
               "type": "BLANK"
@@ -360,7 +378,75 @@
         }
       ]
     },
-    "special_form": {
+    "let_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "STRING",
+          "value": "let"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "("
+              },
+              {
+                "type": "SYMBOL",
+                "name": "symbol"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "dot"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              },
+              {
+                "type": "SYMBOL",
+                "name": "tilde_or_backquote_or_simple_stmt"
+              },
+              {
+                "type": "STRING",
+                "value": ")"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "tilde_or_backquote_or_simple_stmt"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "special_stmt": {
       "type": "SEQ",
       "members": [
         {
@@ -376,15 +462,7 @@
             },
             {
               "type": "STRING",
-              "value": "let"
-            },
-            {
-              "type": "STRING",
               "value": "prog"
-            },
-            {
-              "type": "STRING",
-              "value": "quote"
             },
             {
               "type": "STRING",
@@ -396,7 +474,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "statement"
+            "name": "tilde_or_backquote_or_simple_stmt"
           }
         },
         {
@@ -405,7 +483,7 @@
         }
       ]
     },
-    "lambda": {
+    "lambda_stmt": {
       "type": "PREC",
       "value": 1,
       "content": {
@@ -431,7 +509,7 @@
             "type": "REPEAT",
             "content": {
               "type": "SYMBOL",
-              "name": "statement"
+              "name": "tilde_or_backquote_or_simple_stmt"
             }
           },
           {
@@ -441,64 +519,16 @@
         ]
       }
     },
-    "tilde": {
+    "quote_stmt": {
       "type": "SEQ",
       "members": [
-        {
-          "type": "STRING",
-          "value": "~"
-        },
         {
           "type": "SYMBOL",
-          "name": "statement"
-        }
-      ]
-    },
-    "backquote": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "`"
-        },
-        {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "list_or_terminal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "unquote"
-            }
-          ]
-        }
-      ]
-    },
-    "quote": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "'"
+          "name": "quote"
         },
         {
           "type": "SYMBOL",
           "name": "list_or_terminal"
-        }
-      ]
-    },
-    "unquote": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "STRING",
-          "value": ","
-        },
-        {
-          "type": "SYMBOL",
-          "name": "statement"
         }
       ]
     },
@@ -538,8 +568,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "."
+          "type": "SYMBOL",
+          "name": "dot"
         },
         {
           "type": "SYMBOL",
@@ -552,7 +582,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "tilde"
+          "name": "tilde_stmt"
         },
         {
           "type": "SYMBOL",
@@ -572,6 +602,161 @@
           "name": "terminal"
         }
       ]
+    },
+    "tilde_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "tilde"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "backquote_stmt"
+        }
+      ]
+    },
+    "backquote_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "backquote"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_list_or_terminal"
+        }
+      ]
+    },
+    "unquote_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "unquote"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "simple_stmt"
+        }
+      ]
+    },
+    "unquote_splice_stmt": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "unquote_splice"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "simple_stmt"
+        }
+      ]
+    },
+    "unquote_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "unquote_item"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "unquote_dot_item"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "unquote_dot_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "dot"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_item"
+        }
+      ]
+    },
+    "unquote_item": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "tilde_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_list_or_terminal"
+        }
+      ]
+    },
+    "unquote_list_or_terminal": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "unquote_list"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "terminal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_stmt"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unquote_splice_stmt"
+        }
+      ]
+    },
+    "dot": {
+      "type": "STRING",
+      "value": "."
+    },
+    "quote": {
+      "type": "STRING",
+      "value": "'"
+    },
+    "backquote": {
+      "type": "STRING",
+      "value": "`"
+    },
+    "unquote": {
+      "type": "STRING",
+      "value": ","
+    },
+    "unquote_splice": {
+      "type": "STRING",
+      "value": ",@"
+    },
+    "tilde": {
+      "type": "STRING",
+      "value": "~"
     },
     "terminal": {
       "type": "CHOICE",
@@ -634,7 +819,7 @@
           "type": "TOKEN",
           "content": {
             "type": "PATTERN",
-            "value": "([a-zA-Z]|[!@$%&*_+\\-={}\\[\\]:#|\\\\<>?/])([a-zA-Z0-9]|[!@$%&*_+\\-={}\\[\\]:;|\\\\<>?,/]){0,14}"
+            "value": "([a-zA-Z]|[!@$%&*_+\\-={}\\[\\]:#|\\\\<>?/])([a-zA-Z0-9]|[!@$%&*_+\\-={}\\[\\]:#|\\\\<>?,/]){0,14}"
           }
         }
       ]

@@ -1,7 +1,7 @@
 const CHAR = token(/\^([!-\[]|[\]-~]|\\\\|\\e|\\n|\\r|\\t)/);
 const NUMBER = token(/-?[0-9]+/);
 const STRING = token(/"([^"\\]|\\["\\0\\e\\n\\r\\t])*"/);
-const SYMBOL = token(/([a-zA-Z]|[!@$%&*_+\-={}\[\]:#|\\<>?/])([a-zA-Z0-9]|[!@$%&*_+\-={}\[\]:;|\\<>?,/]){0,14}/);
+const SYMBOL = token(/([a-zA-Z]|[!@$%&*_+\-={}\[\]:#|\\<>?/])([a-zA-Z0-9]|[!@$%&*_+\-={}\[\]:#|\\<>?,/]){0,14}/);
 const COMMENT = token(/;.*/);
 
 module.exports = grammar({
@@ -10,16 +10,20 @@ module.exports = grammar({
   extras: ($) => [/(\s|\f)/, $.comment],
 
   rules: {
-    source_file: ($) => repeat(choice($.top_level_statement, $.comment)),
+    source_file: ($) => repeat(choice($.top_level_stmt, $.comment)),
 
     comment: ($) => COMMENT,
 
-    top_level_statement: ($) =>
+    // Top-level statement.
+
+    top_level_stmt: ($) =>
       choice(
         $.function_definition,
         $.macro_definition,
         $.use_module,
       ),
+
+    // Function and macro definitions.
 
     function_definition: ($) =>
       prec(
@@ -30,7 +34,7 @@ module.exports = grammar({
           field("name", $.symbol),
           field("parameters", $.parameters),
           optional(field("docstring", $.string)),
-          repeat($.statement),
+          repeat($.tilde_or_backquote_or_simple_stmt),
           ")"
         )
       ),
@@ -44,7 +48,7 @@ module.exports = grammar({
           field("name", $.symbol),
           field("parameters", $.parameters),
           optional(field("docstring", $.string)),
-          repeat($.statement),
+          repeat($.tilde_or_backquote_or_simple_stmt),
           ")"
         )
       ),
@@ -52,8 +56,10 @@ module.exports = grammar({
     parameters: ($) =>
       choice(
         $.symbol,
-        seq("(", repeat($.symbol), optional(seq(".", $.symbol)), ")"),
+        seq("(", repeat($.symbol), optional(seq($.dot, $.symbol)), ")"),
       ),
+
+    // Use module definition.
 
     use_module: ($) =>
       prec(
@@ -63,70 +69,144 @@ module.exports = grammar({
           "use",
           repeat(
             choice(
-              seq("'", $.symbol),
-              seq("'", "(", repeat($.symbol), ")"),
+              seq($.quote, $.symbol),
+              seq($.quote, "(", repeat($.symbol), ")"),
             )
           ),
           ")"
         )
       ),
 
-    statement: ($) =>
+    // Statements, including ~() and `().
+
+    tilde_or_backquote_or_simple_stmt: ($) =>
       choice(
-        $.apply,
-        $.special_form,
-        $.lambda,
-        $.tilde,
-        $.backquote,
-        $.quote,
+        $.tilde_stmt,
+        $.backquote_or_simple_stmt,
+      ),
+
+    // Statements, including `().
+
+    backquote_or_simple_stmt: ($) =>
+      choice(
+        $.backquote_stmt,
+        $.simple_stmt,
+      ),
+
+    // Statements.
+
+    simple_stmt: ($) =>
+      choice(
+        $.apply_stmt,
+        $.let_stmt,
+        $.special_stmt,
+        $.lambda_stmt,
+        $.quote_stmt,
         $.terminal,
       ),
-      
-    dot_statement: ($) => seq(".", $.statement),
 
-    apply: ($) =>
+    // Apply statement.
+
+    apply_stmt: ($) =>
       seq(
         "(",
         $.symbol,
-        repeat($.statement),
-        optional($.dot_statement),
+        repeat($.tilde_or_backquote_or_simple_stmt),
+        optional(seq($.dot, $.backquote_stmt)),
         ")",
       ),
 
-    special_form: ($) =>
+    // Special form "let" statement.
+
+    let_stmt: ($) =>
       seq(
         "(",
-        choice(
-          "if",
-          "let",
-          "prog",
-          "quote",
-          "syscall",
+        "let",
+        "(",
+        repeat(
+          seq(
+            "(",
+            $.symbol,
+            optional($.dot),
+            $.tilde_or_backquote_or_simple_stmt,
+            ")",
+          ),
         ),
-        repeat($.statement),
+        ")",
+        repeat($.tilde_or_backquote_or_simple_stmt),
         ")"
       ),
 
-    lambda: ($) =>
-      prec(
-        1,
-        seq("(", "\\", field("parameters", $.parameters), repeat($.statement), ")")
+    // Keyword statements.
+
+    special_stmt: ($) =>
+      seq(
+        "(",
+        choice("if", "prog", "syscall"),
+        repeat($.tilde_or_backquote_or_simple_stmt),
+        ")"
       ),
 
-    tilde: ($) => seq("~", $.statement),
-    backquote: ($) => seq("`", choice($.list_or_terminal, $.unquote)),
-    quote: ($) => seq("'", $.list_or_terminal),
-    unquote: ($) => seq(",", $.statement),
+    // Lambda statements.
 
+    lambda_stmt: ($) =>
+      prec(
+        1,
+        seq(
+          "(",
+          "\\",
+          field("parameters", $.parameters),
+          repeat($.tilde_or_backquote_or_simple_stmt),
+          ")"
+        )
+      ),
+
+    // '() statement.
+
+    quote_stmt: ($) => seq($.quote, $.list_or_terminal),
+    
     list: ($) => seq("(", repeat($.item), optional($.dot_item), ")"),
-    dot_item: ($) => seq(".", $.item),
-    item: ($) => choice($.tilde, $.list_or_terminal),
+    dot_item: ($) => seq($.dot, $.item),
+    item: ($) => choice($.tilde_stmt, $.list_or_terminal),
 
     list_or_terminal: ($) =>
       choice(
         $.list,
         $.terminal,
       ),
+
+    // ~() statement.
+
+    tilde_stmt: ($) => seq($.tilde, $.backquote_stmt),
+
+    // `() statement.
+
+    backquote_stmt: ($) => seq($.backquote, $.unquote_list_or_terminal),
+    unquote_stmt: ($) => seq($.unquote, $.simple_stmt),
+    unquote_splice_stmt: ($) => seq($.unquote_splice, $.simple_stmt),
+
+    unquote_list: ($) => seq("(", repeat($.unquote_item), optional($.unquote_dot_item), ")"),
+    unquote_dot_item: ($) => seq($.dot, $.unquote_item),
+    unquote_item: ($) => choice($.tilde_stmt, $.unquote_list_or_terminal),
+
+    unquote_list_or_terminal: ($) =>
+      choice(
+        $.unquote_list,
+        $.terminal,
+        $.unquote_stmt,
+        $.unquote_splice_stmt,
+      ),
+
+    // Operators.
+      
+    dot: ($) => ".",
+    quote: ($) => "'",
+    backquote: ($) => "`",
+    unquote: ($) => ",",
+    unquote_splice: ($) => ",@",
+    tilde: ($) => "~",
+
+    // Terminal.
 
     terminal: ($) =>
       choice(

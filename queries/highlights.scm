@@ -1,4 +1,4 @@
-;; Special forms
+;; Keywords
 [
   "if"
   "let"
@@ -7,7 +7,7 @@
 ] @keyword
 
 ;; Apply
-(apply . (symbol) @function)
+(apply_stmt . (symbol) @function)
 
 ;; Use module
 [ "use" ] @keyword
@@ -31,7 +31,7 @@
 ;; Lambda 
 [ "\\" ] @keyword
 
-(lambda parameters: (parameters (symbol) @variable.parameter))
+(lambda_stmt parameters: (parameters (symbol) @variable.parameter))
 
 ;; Atoms
 (char) @constant.character
@@ -46,12 +46,12 @@
 ] @punctuation.bracket
 
 ;; Operators
-(dot_item) @operator
-(dot_statement) @operator
+(dot) @operator
 (tilde) @operator
 (backquote) @operator
 (quote) @operator
 (unquote) @operator
+(unquote_splice) @operator
 
 ;; Highlight nil and t as constants, unlike other symbols
 [
