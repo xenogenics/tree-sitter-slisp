@@ -19,7 +19,7 @@
 ;; Use module
 [ "use" ] @keyword
 
-(use_module . (symbol) @namespace)
+(use_module (quote) . (symbol) @namespace)
 
 ;; Function definitions
 [ "def" ] @keyword
