@@ -2,7 +2,6 @@
 [
   "if"
   "prog"
-  "syscall"
 ] @keyword
 
 ;; Let binding
@@ -20,6 +19,14 @@
 [ "use" ] @keyword
 
 (use_module (quote) . (symbol) @namespace)
+
+;; External definitions
+[ "ext" ] @keyword
+
+(external_definition name: (symbol) @function)
+(external_definition signature: (signature (symbol) @variable.parameter (dot) (external_type) @type.builtin))
+(external_definition docstring: (string) @comment)
+(external_definition return_type: (external_type) @type.builtin)
 
 ;; Function definitions
 [ "def" ] @keyword
