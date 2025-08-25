@@ -18,12 +18,28 @@ module.exports = grammar({
 
     top_level_stmt: ($) =>
       choice(
+        $.external_definition,
         $.function_definition,
         $.macro_definition,
         $.use_module,
       ),
 
     // Function and macro definitions.
+
+    external_definition: ($) =>
+      prec(
+        1,
+        seq(
+          "(",
+          "ext",
+          field("name", $.symbol),
+          field("symbol", $.symbol),
+          field("signature", $.signature),
+          optional(field("docstring", $.string)),
+          field("return_type", $.external_type),
+          ")"
+        )
+      ),
 
     function_definition: ($) =>
       prec(
@@ -53,11 +69,16 @@ module.exports = grammar({
         )
       ),
 
+    external_type: ($) => choice("bytes", "integer", "string", "void"),
+
     parameters: ($) =>
       choice(
         $.symbol,
         seq("(", repeat($.symbol), optional(seq($.dot, $.symbol)), ")"),
       ),
+
+    signature: ($) =>
+      seq("(", repeat(seq("(", $.symbol, $.dot, $.external_type, ")")), ")"),
 
     // Use module definition.
 
@@ -147,7 +168,7 @@ module.exports = grammar({
     special_stmt: ($) =>
       seq(
         "(",
-        choice("if", "prog", "syscall"),
+        choice("if", "prog"),
         repeat($.tilde_or_backquote_or_simple_stmt),
         ")"
       ),

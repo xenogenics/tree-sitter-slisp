@@ -149,6 +149,67 @@
     }
   },
   {
+    "type": "external_definition",
+    "named": true,
+    "fields": {
+      "docstring": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "string",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      },
+      "return_type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "external_type",
+            "named": true
+          }
+        ]
+      },
+      "signature": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "signature",
+            "named": true
+          }
+        ]
+      },
+      "symbol": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "external_type",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "function_definition",
     "named": true,
     "fields": {
@@ -434,6 +495,29 @@
     }
   },
   {
+    "type": "signature",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "dot",
+          "named": true
+        },
+        {
+          "type": "external_type",
+          "named": true
+        },
+        {
+          "type": "symbol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "simple_stmt",
     "named": true,
     "fields": {},
@@ -582,6 +666,10 @@
       "required": true,
       "types": [
         {
+          "type": "external_definition",
+          "named": true
+        },
+        {
           "type": "function_definition",
           "named": true
         },
@@ -674,6 +762,10 @@
     "named": true
   },
   {
+    "type": "bytes",
+    "named": false
+  },
+  {
     "type": "char",
     "named": true
   },
@@ -691,7 +783,15 @@
     "named": true
   },
   {
+    "type": "ext",
+    "named": false
+  },
+  {
     "type": "if",
+    "named": false
+  },
+  {
+    "type": "integer",
     "named": false
   },
   {
@@ -727,7 +827,7 @@
     "named": true
   },
   {
-    "type": "syscall",
+    "type": "string",
     "named": false
   },
   {
@@ -744,6 +844,10 @@
   },
   {
     "type": "use",
+    "named": false
+  },
+  {
+    "type": "void",
     "named": false
   }
 ]
