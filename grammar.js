@@ -22,6 +22,7 @@ module.exports = grammar({
         $.function_definition,
         $.macro_definition,
         $.use_module,
+        $.val_definition,
       ),
 
     // Function and macro definitions.
@@ -97,6 +98,18 @@ module.exports = grammar({
           ")"
         )
       ),
+
+    // Val definition.
+    
+    val_definition: ($) =>
+      seq(
+        "(",
+        "val",
+        field("name", $.symbol),
+        choice($.tilde_stmt, $.quote_list_or_terminal),
+        ")",
+      ),
+
 
     // Statements, including ~() and `().
 
