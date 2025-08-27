@@ -11,15 +11,14 @@
 
 (let_bindings name: (symbol) @variable)
 
-
 ;; Apply
 (apply_stmt . (symbol) @function)
 
 ;; Use module
 [ "use" ] @keyword
 
-(use_module (quote) . (symbol) @namespace)
-
+(use_module_global (quote) . (symbol) @namespace)
+(use_module_select (quote) . (symbol) @namespace)
 
 ;; Val definition
 [ "val" ] @keyword

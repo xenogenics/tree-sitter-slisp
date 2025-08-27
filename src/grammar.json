@@ -371,41 +371,12 @@
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "quote"
-                    },
-                    {
-                      "type": "SYMBOL",
-                      "name": "symbol"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "use_module_global"
                 },
                 {
-                  "type": "SEQ",
-                  "members": [
-                    {
-                      "type": "SYMBOL",
-                      "name": "quote"
-                    },
-                    {
-                      "type": "STRING",
-                      "value": "("
-                    },
-                    {
-                      "type": "REPEAT",
-                      "content": {
-                        "type": "SYMBOL",
-                        "name": "symbol"
-                      }
-                    },
-                    {
-                      "type": "STRING",
-                      "value": ")"
-                    }
-                  ]
+                  "type": "SYMBOL",
+                  "name": "use_module_select"
                 }
               ]
             }
@@ -416,6 +387,43 @@
           }
         ]
       }
+    },
+    "use_module_global": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "quote"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "symbol"
+        }
+      ]
+    },
+    "use_module_select": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "quote"
+        },
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "symbol"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
     },
     "val_definition": {
       "type": "SEQ",
@@ -975,11 +983,23 @@
       ]
     },
     "number": {
-      "type": "TOKEN",
-      "content": {
-        "type": "PATTERN",
-        "value": "-?[0-9]+"
-      }
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "-?[0-9]+"
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "x[0-9A-F]+"
+          }
+        }
+      ]
     },
     "char": {
       "type": "TOKEN",
