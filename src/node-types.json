@@ -381,6 +381,11 @@
     }
   },
   {
+    "type": "number",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "parameters",
     "named": true,
     "fields": {},
@@ -735,6 +740,44 @@
       "required": false,
       "types": [
         {
+          "type": "use_module_global",
+          "named": true
+        },
+        {
+          "type": "use_module_select",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "use_module_global",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "quote",
+          "named": true
+        },
+        {
+          "type": "symbol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "use_module_select",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
           "type": "quote",
           "named": true
         },
@@ -845,10 +888,6 @@
     "named": false
   },
   {
-    "type": "number",
-    "named": true
-  },
-  {
     "type": "prog",
     "named": false
   },
@@ -858,11 +897,11 @@
   },
   {
     "type": "string",
-    "named": true
+    "named": false
   },
   {
     "type": "string",
-    "named": false
+    "named": true
   },
   {
     "type": "tilde",

@@ -1,5 +1,6 @@
 const CHAR = token(/\^([!-\[]|[\]-~]|\\\\|\\e|\\n|\\r|\\t)/);
 const NUMBER = token(/-?[0-9]+/);
+const HEXNUMBER = token(/x[0-9A-F]+/);
 const STRING = token(/"([^"\\]|\\["\\0\\e\\n\\r\\t])*"/);
 const SYMBOL = token(/([a-zA-Z]|[!@$%&*_+\-={}\[\]:#|\\<>?/])([a-zA-Z0-9]|[!@$%&*_+\-={}\[\]:#|\\<>?,/]){0,14}/);
 const COMMENT = token(/;.*/);
@@ -89,15 +90,13 @@ module.exports = grammar({
         seq(
           "(",
           "use",
-          repeat(
-            choice(
-              seq($.quote, $.symbol),
-              seq($.quote, "(", repeat($.symbol), ")"),
-            )
-          ),
+          repeat(choice($.use_module_global, $.use_module_select)),
           ")"
         )
       ),
+
+    use_module_global: ($) => seq($.quote, $.symbol),
+    use_module_select: ($) => seq($.quote, "(", repeat($.symbol), ")"),
 
     // Val definition.
     
@@ -256,7 +255,7 @@ module.exports = grammar({
         $.symbol
       ),
 
-    number: ($) => NUMBER,
+    number: ($) => choice(NUMBER, HEXNUMBER),
     char: ($) => CHAR,
     string: ($) => STRING,
     symbol: ($) => choice("nil", "T", "it", SYMBOL),

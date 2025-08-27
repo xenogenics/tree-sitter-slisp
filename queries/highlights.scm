@@ -18,8 +18,8 @@
 ;; Use module
 [ "use" ] @keyword
 
-(use_module (quote) . (symbol) @namespace)
-
+(use_module_global (quote) (symbol) @namespace)
+(use_module_select (quote) (symbol) @namespace)
 
 ;; Val definition
 [ "use" ] @keyword
