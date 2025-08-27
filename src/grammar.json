@@ -43,6 +43,10 @@
         {
           "type": "SYMBOL",
           "name": "use_module"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "val_definition"
         }
       ]
     },
@@ -412,6 +416,44 @@
           }
         ]
       }
+    },
+    "val_definition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "STRING",
+          "value": "val"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "symbol"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "quote_list_or_terminal"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "backquote_stmt"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
     },
     "tilde_or_backquote_or_simple_stmt": {
       "type": "CHOICE",

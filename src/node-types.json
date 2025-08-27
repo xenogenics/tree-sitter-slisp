@@ -680,6 +680,10 @@
         {
           "type": "use_module",
           "named": true
+        },
+        {
+          "type": "val_definition",
+          "named": true
         }
       ]
     }
@@ -736,6 +740,36 @@
         },
         {
           "type": "symbol",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "val_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "symbol",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "backquote_stmt",
+          "named": true
+        },
+        {
+          "type": "quote_list_or_terminal",
           "named": true
         }
       ]
@@ -844,6 +878,10 @@
   },
   {
     "type": "use",
+    "named": false
+  },
+  {
+    "type": "val",
     "named": false
   },
   {

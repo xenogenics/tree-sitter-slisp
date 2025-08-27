@@ -20,6 +20,12 @@
 
 (use_module (quote) . (symbol) @namespace)
 
+
+;; Val definition
+[ "val" ] @keyword
+
+(val_definition name: (symbol) @constant)
+
 ;; External definitions
 [ "ext" ] @keyword
 
