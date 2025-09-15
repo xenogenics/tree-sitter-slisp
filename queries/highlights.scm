@@ -1,13 +1,8 @@
 ;; Keywords
-[
-  "if"
-  "prog"
-] @keyword
+[ "if" "prog" ] @keyword
 
 ;; Let binding
-[
-  "let"
-] @keyword
+[ "let" ] @keyword
 
 (let_bindings name: (symbol) @variable)
 
@@ -59,10 +54,7 @@
 (string) @string
 
 ;; Punctuation
-[
-  "("
-  ")"
-] @punctuation.bracket
+[ "(" ")" ] @punctuation.bracket
 
 ;; Operators
 (dot) @operator
@@ -72,12 +64,11 @@
 (unquote) @operator
 (unquote_splice) @operator
 
-;; Highlight nil and t as constants, unlike other symbols
-[
-  "nil"
-] @constant.builtin.boolean
+;; Highlight nil t as constant
+[ "nil" ] @constant.builtin
+
+;; Highlight as t as boolean constant
+[ "T" ] @constant.builtin.boolean
 
 ;; Highlight variable names used in anamorphic macros.
-[
-  "it"
-] @variable.builtin
+[ "it" ] @variable.builtin
