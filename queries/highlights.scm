@@ -71,4 +71,4 @@
 [ "T" ] @constant.builtin.boolean
 
 ;; Highlight variable names used in anamorphic macros.
-[ "it" ] @variable.builtin
+[ "it" "self" ] @variable.builtin

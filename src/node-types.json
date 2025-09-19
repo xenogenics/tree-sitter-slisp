@@ -896,12 +896,16 @@
     "named": true
   },
   {
-    "type": "string",
+    "type": "self",
     "named": false
   },
   {
     "type": "string",
     "named": true
+  },
+  {
+    "type": "string",
+    "named": false
   },
   {
     "type": "tilde",

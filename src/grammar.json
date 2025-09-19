@@ -1005,7 +1005,7 @@
       "type": "TOKEN",
       "content": {
         "type": "PATTERN",
-        "value": "\\^([!-\\[]|[\\]-~]|\\\\\\\\|\\\\e|\\\\n|\\\\r|\\\\t)"
+        "value": "\\^([!-\\[]|[\\]-~]|\\\\\\\\|\\\\e|\\\\n|\\\\r|\\\\s|\\\\t)"
       }
     },
     "string": {
@@ -1029,6 +1029,10 @@
         {
           "type": "STRING",
           "value": "it"
+        },
+        {
+          "type": "STRING",
+          "value": "self"
         },
         {
           "type": "TOKEN",

@@ -1,4 +1,4 @@
-const CHAR = token(/\^([!-\[]|[\]-~]|\\\\|\\e|\\n|\\r|\\t)/);
+const CHAR = token(/\^([!-\[]|[\]-~]|\\\\|\\e|\\n|\\r|\\s|\\t)/);
 const NUMBER = token(/-?[0-9]+/);
 const HEXNUMBER = token(/x[0-9A-F]+/);
 const STRING = token(/"([^"\\]|\\["\\0\\e\\n\\r\\t])*"/);
@@ -258,6 +258,6 @@ module.exports = grammar({
     number: ($) => choice(NUMBER, HEXNUMBER),
     char: ($) => CHAR,
     string: ($) => STRING,
-    symbol: ($) => choice("nil", "T", "it", SYMBOL),
+    symbol: ($) => choice("nil", "T", "it", "self", SYMBOL),
   },
 });
