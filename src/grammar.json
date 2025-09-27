@@ -278,7 +278,7 @@
               "type": "REPEAT",
               "content": {
                 "type": "SYMBOL",
-                "name": "symbol"
+                "name": "decons_stmt"
               }
             },
             {
@@ -580,12 +580,8 @@
                 "value": "("
               },
               {
-                "type": "FIELD",
-                "name": "name",
-                "content": {
-                  "type": "SYMBOL",
-                  "name": "symbol"
-                }
+                "type": "SYMBOL",
+                "name": "decons_stmt"
               },
               {
                 "type": "CHOICE",
@@ -721,6 +717,81 @@
           }
         ]
       }
+    },
+    "decons_stmt": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "symbol"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "decons_list"
+        }
+      ]
+    },
+    "decons_list": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "decons_item"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "decons_dot_item"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
+    },
+    "decons_dot_item": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "SYMBOL",
+          "name": "decons_item"
+        }
+      ]
+    },
+    "decons_item": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "symbol"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "wildcard"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "decons_list"
+        }
+      ]
     },
     "quote_stmt": {
       "type": "SEQ",
@@ -979,6 +1050,10 @@
         {
           "type": "SYMBOL",
           "name": "symbol"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "wildcard"
         }
       ]
     },
@@ -1042,6 +1117,10 @@
           }
         }
       ]
+    },
+    "wildcard": {
+      "type": "STRING",
+      "value": "_"
     }
   },
   "extras": [

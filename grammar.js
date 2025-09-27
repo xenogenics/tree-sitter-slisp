@@ -76,7 +76,12 @@ module.exports = grammar({
     parameters: ($) =>
       choice(
         $.symbol,
-        seq("(", repeat($.symbol), optional(seq($.dot, $.symbol)), ")"),
+        seq(
+          "(",
+          repeat($.decons_stmt),
+          optional(seq($.dot, $.symbol)),
+          ")"
+        ),
       ),
 
     signature: ($) =>
@@ -157,7 +162,7 @@ module.exports = grammar({
         repeat(
           seq(
             "(",
-            field("name", $.symbol),
+            $.decons_stmt,
             optional($.dot),
             $.tilde_or_backquote_or_simple_stmt,
             ")",
@@ -198,6 +203,13 @@ module.exports = grammar({
           ")"
         )
       ),
+
+    // Deconstruction statement.
+
+    decons_stmt: ($) => choice($.symbol, $.decons_list),
+    decons_list: ($) => seq("(", repeat($.decons_item), optional($.decons_dot_item), ")"),
+    decons_dot_item: ($) => seq(".", $.decons_item),
+    decons_item: ($) => choice($.symbol, $.wildcard, $.decons_list),
 
     // '() statement.
 
@@ -252,12 +264,14 @@ module.exports = grammar({
         $.number,
         $.char,
         $.string,
-        $.symbol
+        $.symbol,
+        $.wildcard,
       ),
 
     number: ($) => choice(NUMBER, HEXNUMBER),
     char: ($) => CHAR,
     string: ($) => STRING,
     symbol: ($) => choice("nil", "T", "it", "self", SYMBOL),
+    wildcard: ($) => "_",
   },
 });
